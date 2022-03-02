@@ -33,6 +33,8 @@ namespace Parking_System_API.Data.Repositories.SystemUserR
             return await query.ToArrayAsync();
         }
 
+
+
         public async Task<SystemUser> GetSystemUserAsyncByEmail(string email)
         {
             IQueryable<SystemUser> query = _context.SystemUsers;

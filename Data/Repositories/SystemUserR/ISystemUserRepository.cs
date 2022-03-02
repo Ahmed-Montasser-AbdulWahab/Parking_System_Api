@@ -12,7 +12,7 @@ namespace Parking_System_API.Data.Repositories.SystemUserR
 
         // SystemUsers
         Task<SystemUser[]> GetAllSystemUsersAsync();
-        Task<SystemUser> GetSystemUserAsync(string email);
+        Task<SystemUser> GetSystemUserAsyncByEmail(string email);
         Task<SystemUser[]> GetSystemUsersAsyncByName(string name);
 
     }

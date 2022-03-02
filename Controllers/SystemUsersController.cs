@@ -84,7 +84,7 @@ namespace Parking_System_API.Controllers
         {
             try
             {
-                var systemUser = await systemUserRepository.GetSystemUserAsync(email);
+                var systemUser = await systemUserRepository.GetSystemUserAsyncByEmail(email);
                 SystemUserModel model = mapper.Map<SystemUserModel>(systemUser);
                 return model;
             }

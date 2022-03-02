@@ -20,7 +20,7 @@ namespace Parking_System_API
         public async Task<JwtAuthenticationResponse> AuthenticateCustomer(string email, string password)
         {
             //Validating the User Name and Password
-            var systemUser = await systemUserRepository.GetSystemUserAsync(email);
+            var systemUser = await systemUserRepository.GetSystemUserAsyncByEmail(email);
 
             if(systemUser == null)
             {
@@ -64,7 +64,7 @@ namespace Parking_System_API
         {
 
             //Validating the User Name and Password
-            var systemUser = await systemUserRepository.GetSystemUserAsync(email);
+            var systemUser = await systemUserRepository.GetSystemUserAsyncByEmail(email);
 
             if (systemUser == null)
             {

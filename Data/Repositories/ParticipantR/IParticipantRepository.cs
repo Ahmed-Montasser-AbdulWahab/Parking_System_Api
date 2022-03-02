@@ -10,8 +10,8 @@ namespace Parking_System_API.Data.Repositories.ParticipantR
         Task<bool> SaveChangesAsync();
 
         // SystemUsers
-        Task<Participant[]> GetAllSystemUsersAsync();
-        Task<Participant> GetSystemUserAsync(string email);
-        Task<Participant[]> GetSystemUsersAsyncByName(string name);
+        //Task<Participant[]> GetAllSystemUsersAsync();
+        //Task<Participant> GetSystemUserAsync(string email);
+        //Task<Participant[]> GetSystemUsersAsyncByName(string name);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Parking_System_API.Data.Entities
@@ -7,14 +8,25 @@ namespace Parking_System_API.Data.Entities
     {
         [Key, Required]
         public int ParticipantId { get; set; }
+
         public string Name { get; set; }
 
-        [Required]
+        [Required ]
         public string Email { get; set; }
         [Required]
         public string Password { get; set; }
+        [Required]
         public string Salt { get; set; }
+        [Required]
+        public bool DoProvidePhoto { get; set; }
+        [Required]
+        public bool DoDetected { get; set; }
+        [Required]
+        public bool Status { //0 : Not Activated , 1: Activated
+            get; set;
+        }
 
-        public bool Status { get; set; }
+        public ICollection<Vehicle> Vehicles { get; set; }
+        public ICollection<ParkingTransaction> ParkingTransactions { get; set; }
     }
 }

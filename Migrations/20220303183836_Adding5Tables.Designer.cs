@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Parking_System_API.Data.DBContext;
 
 namespace Parking_System_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220303183836_Adding5Tables")]
+    partial class Adding5Tables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,25 +29,20 @@ namespace Parking_System_API.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("ConnectionString")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Direction")
                         .HasColumnType("bit");
 
-                    b.Property<string>("HardwareType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("HardwareType")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Service")
                         .HasColumnType("bit");
 
                     b.HasKey("HardwareId");
 
-                    b.HasIndex("ConnectionString")
-                        .IsUnique()
-                        .HasFilter("[ConnectionString] IS NOT NULL");
-
-                    b.ToTable("Hardwares");
+                    b.ToTable("Hardware");
                 });
 
             modelBuilder.Entity("Parking_System_API.Data.Entities.ParkingTransaction", b =>
@@ -89,7 +86,7 @@ namespace Parking_System_API.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
@@ -106,9 +103,6 @@ namespace Parking_System_API.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("ParticipantId");
-
-                    b.HasIndex("Email")
-                        .IsUnique();
 
                     b.ToTable("Participants");
                 });

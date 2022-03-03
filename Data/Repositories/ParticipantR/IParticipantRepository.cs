@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using Parking_System_API.Data.Entities;
+using System.Threading.Tasks;
 
 namespace Parking_System_API.Data.Repositories.ParticipantR
 {
@@ -10,8 +11,8 @@ namespace Parking_System_API.Data.Repositories.ParticipantR
         Task<bool> SaveChangesAsync();
 
         // SystemUsers
-        //Task<Participant[]> GetAllSystemUsersAsync();
-        //Task<Participant> GetSystemUserAsync(string email);
-        //Task<Participant[]> GetSystemUsersAsyncByName(string name);
+        Task<Participant[]> GetAllParticipants(bool getVehicles = false, bool getTransactions = false);
+        Task<Participant> GetParticipantAsyncByEmail(string email, bool getVehicles = false, bool getTransactions = false);
+        Task<Participant> GetParticipantAsyncByID(int id, bool getVehicles = false, bool getTransactions = false);
     }
 }

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Parking_System_API.Data.DBContext;
 
 namespace Parking_System_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220303204118_AddingUniqueConnectionStringToHardware")]
+    partial class AddingUniqueConnectionStringToHardware
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,9 +34,8 @@ namespace Parking_System_API.Migrations
                     b.Property<bool>("Direction")
                         .HasColumnType("bit");
 
-                    b.Property<string>("HardwareType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("HardwareType")
+                        .HasColumnType("int");
 
                     b.Property<bool>("Service")
                         .HasColumnType("bit");
@@ -45,7 +46,7 @@ namespace Parking_System_API.Migrations
                         .IsUnique()
                         .HasFilter("[ConnectionString] IS NOT NULL");
 
-                    b.ToTable("Hardwares");
+                    b.ToTable("Hardware");
                 });
 
             modelBuilder.Entity("Parking_System_API.Data.Entities.ParkingTransaction", b =>

@@ -8,6 +8,7 @@ using Parking_System_API.Data.Repositories.SystemUserR;
 using Parking_System_API.Model;
 using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Routing;
 
 namespace Parking_System_API.Controllers
 {
@@ -18,12 +19,14 @@ namespace Parking_System_API.Controllers
         private readonly ISystemUserRepository systemUserRepository;
         private readonly JwtAuthenticationManager jwtAuthenticationManager;
         private readonly IMapper mapper;
+        private readonly LinkGenerator linkGenerator;
 
-        public SystemUsersController(ISystemUserRepository systemUserRepository, JwtAuthenticationManager jwtAuthenticationManager, IMapper mapper)
+        public SystemUsersController(ISystemUserRepository systemUserRepository, JwtAuthenticationManager jwtAuthenticationManager, IMapper mapper, LinkGenerator linkGenerator)
         {
             this.systemUserRepository = systemUserRepository;
             this.jwtAuthenticationManager = jwtAuthenticationManager;
             this.mapper = mapper;
+            this.linkGenerator = linkGenerator;
         }
         [HttpPost("login"), AllowAnonymous]
         public async Task<IActionResult> login(AuthenticationRequest authenticationRequest)
@@ -35,7 +38,7 @@ namespace Parking_System_API.Controllers
                 else
                     return Ok(authResult);
             }
-            catch (Exception ex) {
+            catch (Exception ) {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Error");
             }
 
@@ -46,6 +49,11 @@ namespace Parking_System_API.Controllers
         {
             try
             {
+                var location = linkGenerator.GetPathByAction("GetSystemUser", "SystemUsers", new { email = systemUser.Email });
+                if (String.IsNullOrEmpty(location))
+                {
+                    BadRequest("Try Again");
+                }
                 var salt = Hashing.HashingClass.GenerateSalt();
                 var hashed = Hashing.HashingClass.GenerateHashedPassword(systemUser.Password, salt);
                 systemUser.Password = hashed;
@@ -54,11 +62,11 @@ namespace Parking_System_API.Controllers
 
                 if (await systemUserRepository.SaveChangesAsync())
                 {
-                    return Created("", $"{systemUser.Email} is created");
+                    return Created(location, mapper.Map<SystemUserModel>(systemUser));
                 }
                 return BadRequest("Check Provided Data, i.e:Data may be duplicated");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Error");
             }
@@ -74,7 +82,7 @@ namespace Parking_System_API.Controllers
                 SystemUserModel[] models = mapper.Map<SystemUserModel[]>(systemUsers);
                 return models;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Error");
             }
@@ -88,7 +96,7 @@ namespace Parking_System_API.Controllers
                 SystemUserModel model = mapper.Map<SystemUserModel>(systemUser);
                 return model;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Error");
             }
@@ -103,10 +111,16 @@ namespace Parking_System_API.Controllers
                 SystemUserModel[] models = mapper.Map<SystemUserModel[]>(systemUsers);
                 return models;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, "Error");
             }
         }
+
+        //[HttpGet, Authorize(Roles = "operator, admin")]
+        //public async Task<ActionResult<Participant>> AddParticipant()
+        //{
+
+        //}
     }
 }

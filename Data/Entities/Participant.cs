@@ -7,7 +7,7 @@ namespace Parking_System_API.Data.Entities
     public class Participant
     {
         [Key, Required]
-        public int ParticipantId { get; set; }
+        public long ParticipantId { get; set; }
 
         public string Name { get; set; }
 
@@ -25,6 +25,7 @@ namespace Parking_System_API.Data.Entities
         public bool Status { //0 : Not Activated , 1: Activated
             get; set;
         }
+
 
         public ICollection<Vehicle> Vehicles { get; set; }
         public ICollection<ParkingTransaction> ParkingTransactions { get; set; }

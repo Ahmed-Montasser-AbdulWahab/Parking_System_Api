@@ -66,7 +66,7 @@ namespace Parking_System_API.Data.Repositories.ParticipantR
             return await query.FirstOrDefaultAsync();
         }
 
-        public async Task<Participant> GetParticipantAsyncByID(int id, bool getVehicles = false, bool getTransactions = false)
+        public async Task<Participant> GetParticipantAsyncByID(long id, bool getVehicles = false, bool getTransactions = false)
         {
             IQueryable<Participant> query = _context.Participants;
 

@@ -3,44 +3,48 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Parking_System_API.Migrations
 {
-    public partial class Adding5Tables : Migration
+    public partial class AddDatabase : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DeleteData(
-                table: "SystemUsers",
-                keyColumn: "Email",
-                keyValue: "admin@admin.com");
-
-            migrationBuilder.DeleteData(
-                table: "SystemUsers",
-                keyColumn: "Email",
-                keyValue: "operator@operator.com");
+            migrationBuilder.CreateTable(
+                name: "Constants",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ConstantName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Value = table.Column<long>(type: "bigint", nullable: false),
+                    StringValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Constants", x => x.ID);
+                });
 
             migrationBuilder.CreateTable(
-                name: "Hardware",
+                name: "Hardwares",
                 columns: table => new
                 {
                     HardwareId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    HardwareType = table.Column<int>(type: "int", nullable: false),
-                    ConnectionString = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HardwareType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConnectionString = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Service = table.Column<bool>(type: "bit", nullable: false),
                     Direction = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Hardware", x => x.HardwareId);
+                    table.PrimaryKey("PK_Hardwares", x => x.HardwareId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Participants",
                 columns: table => new
                 {
-                    ParticipantId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ParticipantId = table.Column<long>(type: "bigint", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Salt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DoProvidePhoto = table.Column<bool>(type: "bit", nullable: false),
@@ -50,6 +54,21 @@ namespace Parking_System_API.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Participants", x => x.ParticipantId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SystemUsers",
+                columns: table => new
+                {
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salt = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Type = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SystemUsers", x => x.Email);
                 });
 
             migrationBuilder.CreateTable(
@@ -74,7 +93,7 @@ namespace Parking_System_API.Migrations
                 name: "ParkingTransactions",
                 columns: table => new
                 {
-                    ParticipantId = table.Column<int>(type: "int", nullable: false),
+                    ParticipantId = table.Column<long>(type: "bigint", nullable: false),
                     PlateNumberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     HardwareId = table.Column<int>(type: "int", nullable: false),
                     DateTimeTransaction = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -84,33 +103,30 @@ namespace Parking_System_API.Migrations
                 {
                     table.PrimaryKey("PK_ParkingTransactions", x => new { x.ParticipantId, x.PlateNumberId, x.HardwareId, x.DateTimeTransaction });
                     table.ForeignKey(
-                        name: "FK_ParkingTransactions_Hardware_HardwareId",
+                        name: "FK_ParkingTransactions_Hardwares_HardwareId",
                         column: x => x.HardwareId,
-                        principalTable: "Hardware",
+                        principalTable: "Hardwares",
                         principalColumn: "HardwareId",
-                        onDelete: ReferentialAction.Cascade,
-                        onUpdate: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ParkingTransactions_Participants_ParticipantId",
                         column: x => x.ParticipantId,
                         principalTable: "Participants",
                         principalColumn: "ParticipantId",
-                        onDelete: ReferentialAction.Cascade,
-                        onUpdate: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ParkingTransactions_Vehicles_PlateNumberId",
                         column: x => x.PlateNumberId,
                         principalTable: "Vehicles",
                         principalColumn: "PlateNumberId",
-                        onDelete: ReferentialAction.Cascade,
-                        onUpdate: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Participant_Vehicle",
                 columns: table => new
                 {
-                    ParticipantsParticipantId = table.Column<int>(type: "int", nullable: false),
+                    ParticipantsParticipantId = table.Column<long>(type: "bigint", nullable: false),
                     VehiclesPlateNumberId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -121,16 +137,26 @@ namespace Parking_System_API.Migrations
                         column: x => x.ParticipantsParticipantId,
                         principalTable: "Participants",
                         principalColumn: "ParticipantId",
-                        onDelete: ReferentialAction.Cascade,
-                        onUpdate: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Participant_Vehicle_Vehicles_VehiclesPlateNumberId",
                         column: x => x.VehiclesPlateNumberId,
                         principalTable: "Vehicles",
                         principalColumn: "PlateNumberId",
-                        onDelete: ReferentialAction.Cascade,
-                        onUpdate: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Constants",
+                columns: new[] { "ID", "ConstantName", "StringValue", "Value" },
+                values: new object[] { 1, "ForeignID", null, 10000000000000L });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Hardwares_ConnectionString",
+                table: "Hardwares",
+                column: "ConnectionString",
+                unique: true,
+                filter: "[ConnectionString] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ParkingTransactions_HardwareId",
@@ -146,10 +172,19 @@ namespace Parking_System_API.Migrations
                 name: "IX_Participant_Vehicle_VehiclesPlateNumberId",
                 table: "Participant_Vehicle",
                 column: "VehiclesPlateNumberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Participants_Email",
+                table: "Participants",
+                column: "Email",
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Constants");
+
             migrationBuilder.DropTable(
                 name: "ParkingTransactions");
 
@@ -157,23 +192,16 @@ namespace Parking_System_API.Migrations
                 name: "Participant_Vehicle");
 
             migrationBuilder.DropTable(
-                name: "Hardware");
+                name: "SystemUsers");
+
+            migrationBuilder.DropTable(
+                name: "Hardwares");
 
             migrationBuilder.DropTable(
                 name: "Participants");
 
             migrationBuilder.DropTable(
                 name: "Vehicles");
-
-            migrationBuilder.InsertData(
-                table: "SystemUsers",
-                columns: new[] { "Email", "Name", "Password", "Salt", "Type" },
-                values: new object[] { "admin@admin.com", "admin", "admin", null, true });
-
-            migrationBuilder.InsertData(
-                table: "SystemUsers",
-                columns: new[] { "Email", "Name", "Password", "Salt", "Type" },
-                values: new object[] { "operator@operator.com", "operator", "operator", null, false });
         }
     }
 }

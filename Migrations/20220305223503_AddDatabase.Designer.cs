@@ -10,8 +10,8 @@ using Parking_System_API.Data.DBContext;
 namespace Parking_System_API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220303204118_AddingUniqueConnectionStringToHardware")]
-    partial class AddingUniqueConnectionStringToHardware
+    [Migration("20220305223503_AddDatabase")]
+    partial class AddDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,35 @@ namespace Parking_System_API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.14")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Parking_System_API.Data.Entities.Constant", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ConstantName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StringValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Value")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Constants");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            ConstantName = "ForeignID",
+                            Value = 10000000000000L
+                        });
+                });
 
             modelBuilder.Entity("Parking_System_API.Data.Entities.Hardware", b =>
                 {
@@ -34,8 +63,9 @@ namespace Parking_System_API.Migrations
                     b.Property<bool>("Direction")
                         .HasColumnType("bit");
 
-                    b.Property<int>("HardwareType")
-                        .HasColumnType("int");
+                    b.Property<string>("HardwareType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Service")
                         .HasColumnType("bit");
@@ -46,13 +76,13 @@ namespace Parking_System_API.Migrations
                         .IsUnique()
                         .HasFilter("[ConnectionString] IS NOT NULL");
 
-                    b.ToTable("Hardware");
+                    b.ToTable("Hardwares");
                 });
 
             modelBuilder.Entity("Parking_System_API.Data.Entities.ParkingTransaction", b =>
                 {
-                    b.Property<int>("ParticipantId")
-                        .HasColumnType("int");
+                    b.Property<long>("ParticipantId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("PlateNumberId")
                         .HasColumnType("nvarchar(450)");
@@ -77,10 +107,8 @@ namespace Parking_System_API.Migrations
 
             modelBuilder.Entity("Parking_System_API.Data.Entities.Participant", b =>
                 {
-                    b.Property<int>("ParticipantId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<long>("ParticipantId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("DoDetected")
                         .HasColumnType("bit");
@@ -171,8 +199,8 @@ namespace Parking_System_API.Migrations
 
             modelBuilder.Entity("ParticipantVehicle", b =>
                 {
-                    b.Property<int>("ParticipantsParticipantId")
-                        .HasColumnType("int");
+                    b.Property<long>("ParticipantsParticipantId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("VehiclesPlateNumberId")
                         .HasColumnType("nvarchar(450)");

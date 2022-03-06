@@ -62,3 +62,5 @@ C:\Users\ahmed\Documents\Visual Studio 2022\Projects\Parking_System_API\obj\Debu
 C:\Users\ahmed\Documents\Visual Studio 2022\Projects\Parking_System_API\obj\Debug\net5.0\Parking_System_API.genruntimeconfig.cache
 C:\Users\ahmed\Documents\Visual Studio 2022\Projects\Parking_System_API\obj\Debug\net5.0\ref\Parking_System_API.dll
 C:\Users\ahmed\Documents\Visual Studio 2022\Projects\Parking_System_API\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\ahmed\Documents\Visual Studio 2022\Projects\Parking_System_API\bin\Debug\net5.0\DotNetEnv.dll
+C:\Users\ahmed\Documents\Visual Studio 2022\Projects\Parking_System_API\bin\Debug\net5.0\Sprache.dll

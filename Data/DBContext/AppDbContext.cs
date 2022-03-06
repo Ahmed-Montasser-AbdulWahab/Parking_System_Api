@@ -16,6 +16,8 @@ namespace Parking_System_API.Data.DBContext
         public DbSet<Vehicle> Vehicles { get; set; }
         public DbSet<Hardware> Hardwares { get; set; }
         public DbSet<ParkingTransaction> ParkingTransactions { get; set; }
+        public DbSet<Constant> Constants { get; set; }
+
         
 
         protected override void OnModelCreating(ModelBuilder mb)
@@ -33,6 +35,15 @@ namespace Parking_System_API.Data.DBContext
             mb.Entity<Hardware>(entity => {
                 entity.HasIndex(e => e.ConnectionString).IsUnique();
             });
+            mb.Entity<Constant>().HasData(new Constant
+            {
+                ID = 1,
+                ConstantName = "ForeignID",
+                Value = 10000000000000,
+
+            });
+            mb.Entity<Participant>().Property(c => c.ParticipantId).ValueGeneratedNever();
+            mb.Entity<Vehicle>().Property(c => c.PlateNumberId).ValueGeneratedNever();
 
         }
 

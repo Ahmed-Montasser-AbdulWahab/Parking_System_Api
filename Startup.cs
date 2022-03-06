@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Parking_System_API.Data.DBContext;
+using Parking_System_API.Data.Repositories.ConstantsR;
 using Parking_System_API.Data.Repositories.HardwareR;
 using Parking_System_API.Data.Repositories.ParkingTransactionsR;
 using Parking_System_API.Data.Repositories.ParticipantR;
@@ -44,7 +45,7 @@ namespace Parking_System_API
             services.AddScoped<IVehicleRepository, VehicleRepository>();
             services.AddScoped<IParticipantRepository, ParticipantRepository>();
             services.AddScoped<IParkingTransactionRepository, ParkingTransactionRepository>();
-
+            services.AddScoped<IConstantRepository, ConstantRepository>();
 
             services.AddScoped<JwtAuthenticationManager>();
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
